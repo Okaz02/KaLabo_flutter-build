@@ -13,7 +13,7 @@ jobs:
 
       - name: Install NoMachine
         run: |
-          curl -o nomachine.pkg https://download.nomachine.com/download/8.13/MacOSX/nomachine_8.13.1_1_x86_64.pkg
+          curl -o nomachine.pkg https://web9001.nomachine.com/download/9.6/MacOSX/nomachine_9.6.3_1.dmg
           sudo installer -pkg nomachine.pkg -target /
 
       - name: Start NoMachine
