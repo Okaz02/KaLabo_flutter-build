@@ -16,7 +16,7 @@ jobs:
             curl -o nomachine.dmg https://web9001.nomachine.com/download/9.6/MacOSX/nomachine_9.6.3_1.dmg
             hdiutil attach nomachine.dmg
             sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
-            hdiutil detach /Volumes/NoMachine
+            hdiutil detach /Volumes/NoMachine || true
 
       - name: Set runner password
         env:
