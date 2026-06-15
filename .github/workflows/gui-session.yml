@@ -18,11 +18,10 @@ jobs:
             sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
             hdiutil detach /Volumes/NoMachine
 
-      - name: Set runner SSH key
-        run: |
-          mkdir -p /Users/runner/.ssh
-          echo "${{ secrets.MY_PUBLIC_KEY }}" >> /Users/runner/.ssh/authorized_keys
-          chmod 600 /Users/runner/.ssh/authorized_keys
+      - name: Set runner password
+        env:
+            RUNNER_PASSWORD: ${{ secrets.RUNNER_PASSWORD }}
+        run: echo "runner:$RUNNER_PASSWORD" | sudo chpasswd
 
       - name: Start NoMachine
         run: |
