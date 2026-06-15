@@ -18,16 +18,11 @@ jobs:
             sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
             hdiutil detach /Volumes/NoMachine || true
 
-      - name: Set runner password
-        env:
-            RUNNER_PASSWORD: ${{ secrets.RUNNER_PASSWORD }}
+      - name: Set password for runner
         run: |
-            CURRENT_PASSWORD=$(sudo ruby -e 'key = [125, 137, 82, 35, 210, 188, 221, 234, 163, 185, 31]; IO.read("/etc/kcpassword").bytes.each_with_index { |b, i| e = b ^ key[i % key.size]; break if e == 0; print [e].pack("U*") }')
-            sudo sysadminctl \
-              -adminUser runner \
-              -adminPassword "$CURRENT_PASSWORD" \
-              -resetPasswordFor runner \
-              -newPassword "$RUNNER_PASSWORD"
+            # GitHubのmacOSでは dscl コマンドを使ってパスワードを上書き設定します
+            sudo dscl . -passwd /Users/runner "${{ secrets.RUNNER_PASSWORD }}"
+
 
       - name: Start NoMachine
         run: |
