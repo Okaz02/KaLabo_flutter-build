@@ -1,0 +1,40 @@
+name: Mac GUI Session
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gui-session:
+    runs-on: macos-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install NoMachine
+        run: |
+          curl -o nomachine.pkg https://download.nomachine.com/download/8.13/MacOSX/nomachine_8.13.1_1_x86_64.pkg
+          sudo installer -pkg nomachine.pkg -target /
+
+      - name: Start NoMachine
+        run: |
+          sudo /etc/NX/nxserver --startup
+          sleep 5
+
+      - name: Install cloudflared
+        run: brew install cloudflared
+
+      - name: Start Cloudflare Tunnel for NoMachine
+        run: |
+          cloudflared tunnel --url tcp://localhost:4000 > tunnel.log 2>&1 &
+          sleep 10
+
+      - name: Print connection info
+        run: |
+          echo "===================================="
+          TUNNEL_URL=$(grep -i "trycloudflare" tunnel.log | awk '{print $NF}')
+          echo "Tunnel URL: $TUNNEL_URL"
+          echo "===================================="
+
+      - name: Keep session alive
+        run: sleep 3000
