@@ -20,8 +20,8 @@ jobs:
 
       - name: Set password for runner
         run: |
-            # GitHubのmacOSでは dscl コマンドを使ってパスワードを上書き設定します
-            sudo dscl . -passwd /Users/runner "${{ secrets.RUNNER_PASSWORD }}"
+            sudo sysadminctl -adminUser runner -adminPassword "" -resetPasswordFor runner -newPassword "${{ secrets.MAC_NEW_PASSWORD }}"
+
 
 
       - name: Start NoMachine
