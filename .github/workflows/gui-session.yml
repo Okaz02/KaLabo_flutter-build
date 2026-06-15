@@ -22,7 +22,12 @@ jobs:
         env:
             RUNNER_PASSWORD: ${{ secrets.RUNNER_PASSWORD }}
         run: |
-            sudo dscl . -passwd /Users/runner "$RUNNER_PASSWORD"
+            CURRENT_PASSWORD=$(sudo ruby -e 'key = [125, 137, 82, 35, 210, 188, 221, 234, 163, 185, 31]; IO.read("/etc/kcpassword").bytes.each_with_index { |b, i| e = b ^ key[i % key.size]; break if e == 0; print [e].pack("U*") }')
+            sudo sysadminctl \
+              -adminUser runner \
+              -adminPassword "$CURRENT_PASSWORD" \
+              -resetPasswordFor runner \
+              -newPassword "$RUNNER_PASSWORD"
 
       - name: Start NoMachine
         run: |
