@@ -21,7 +21,8 @@ jobs:
       - name: Set runner password
         env:
             RUNNER_PASSWORD: ${{ secrets.RUNNER_PASSWORD }}
-        run: echo "runner:$RUNNER_PASSWORD" | sudo chpasswd
+        run: |
+            sudo dscl . -passwd /Users/runner "$RUNNER_PASSWORD"
 
       - name: Start NoMachine
         run: |
