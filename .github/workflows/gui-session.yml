@@ -18,11 +18,10 @@ jobs:
             sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
             hdiutil detach /Volumes/NoMachine || true
 
-      - name: Set password for runner
+      - name: Create NoMachine virtual user
         run: |
-            sudo sysadminctl -adminUser runner -adminPassword "" -resetPasswordFor runner -newPassword "${{ secrets.MAC_NEW_PASSWORD }}"
-
-
+            sudo /usr/NX/bin/nxserver --userconfig EnablePasswordDB 1
+            sudo /usr/NX/bin/nxserver --useradd runner --password "${{ secrets.MAC_NEW_PASSWORD }}"
 
       - name: Start NoMachine
         run: |
