@@ -18,6 +18,12 @@ jobs:
             sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
             hdiutil detach /Volumes/NoMachine
 
+      - name: Set runner SSH key
+        run: |
+          mkdir -p /Users/runner/.ssh
+          echo "${{ secrets.MY_PUBLIC_KEY }}" >> /Users/runner/.ssh/authorized_keys
+          chmod 600 /Users/runner/.ssh/authorized_keys
+
       - name: Start NoMachine
         run: |
           sudo /etc/NX/nxserver --startup
