@@ -6,6 +6,7 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -16,8 +17,13 @@ jobs:
 
       - run: flutter pub get
 
-      - name: Build IPA
-        run: flutter build ipa --target=test/test_UVR.dart --release --no-codesign -v --build-name=1.0.0 --build-number=1
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          rm -rf Pods Podfile.lock .symlinks Flutter/ephemeral
+          pod install --repo-update
+
+      - run: flutter build ipa --target=test/test_UVR.dart --release --no-codesign -v
 
       - uses: actions/upload-artifact@v4
         with:
