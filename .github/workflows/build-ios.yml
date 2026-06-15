@@ -16,6 +16,15 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
+          cd ..
+
+      - run: flutter clean
+
       - run: flutter build ipa --target=test/test_UVR.dart --release --no-codesign -v
 
       - uses: actions/upload-artifact@v4
