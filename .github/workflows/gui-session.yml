@@ -34,8 +34,7 @@ jobs:
       - name: Print connection info
         run: |
           echo "===================================="
-          TUNNEL_URL=$(grep -i "trycloudflare" tunnel.log | awk '{print $NF}')
-          echo "Tunnel URL: $TUNNEL_URL"
+          cat tunnel.log
           echo "===================================="
 
       - name: Keep session alive
